@@ -1,0 +1,7 @@
+.venv/
+tf_env/
+*.zip
+.DS_Store
+.vscode/
+__pycache__/
+garbage-classification-v2/

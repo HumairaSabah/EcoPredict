@@ -1,0 +1,5 @@
+Model Accuracy: 90.8%
+Validation Accuracy: 91.07%
+Model Loss: 0.2807
+
+Precision, Recall, F1 scores available in the notebook metrics.

@@ -1,0 +1,3 @@
+Garbage Classification Dataset v2
+Since this dataset is very large, please view and download it from the original source:
+- Kaggle Dataset:https://www.kaggle.com/datasets/sumn2u/garbage-classification-v2

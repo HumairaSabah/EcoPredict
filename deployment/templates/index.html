@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garbage Class Prediction</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    
+    <div class="container">
+        <div id="screen-welcome" class="screen active">
+            <header>
+                <h1>Welcome to EcoPredict</h1>
+                <p style="font-size: 1.2rem; margin-top: 10px;">Ready to make smarter choices for the planet? ♻️</p>
+            </header>
+            
+            <div class="welcome-content glass-panel" style="background: var(--glass-bg); padding: 2.5rem; border-radius: 20px; border: 1px solid var(--glass-border); line-height: 1.6;">
+                <h2 style="color: var(--primary-color); margin-bottom: 0.5rem;">🤖 Smart Scan</h2>
+                <p style="color: var(--text-muted); margin-bottom: 2rem;">Just upload an image, and this smart AI quickly looks at patterns like shape, color, and texture to identify the type of waste — all in seconds ⚡</p>
+                
+                <h2 style="color: var(--success); margin-bottom: 0.5rem;">🌍 Why It Matters</h2>
+                <p style="color: var(--text-muted); margin-bottom: 2rem;">Proper waste segregation helps reduce pollution and improves recycling.<br>With EcoPredict, you can take small steps that lead to a greener future 💚</p>
+                
+                <div style="text-align: center; margin-top: 2.5rem;">
+                    <h2 style="color: white; margin-bottom: 0.5rem;">✨ Let’s Go!</h2>
+                    <p style="color: var(--text-main); margin-bottom: 1.5rem;">Scan it. Sort it. Save the planet! ♻️🌍</p>
+                    <button id="btn-start" class="btn-primary" style="padding: 1rem 3rem; font-size: 1.2rem;">Start Scanning</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 2: Main App -->
+        <div id="screen-app" class="screen" style="display: none;">
+            <header>
+                <h1>EcoPredict</h1>
+                <p>Smart Garbage Classification</p>
+            </header>
+
+            <div class="main-content">
+                <div class="upload-section">
+                    <div class="drop-zone" id="drop-zone">
+                        <div class="icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                        </div>
+                        <span class="drop-zone-text">Drag & Drop an image here</span>
+                        <span class="drop-zone-sub">or click to browse(Upto 16 MB)</span>
+                        <button class="btn-camera" id="btn-open-camera">Take a Picture</button>
+                        <input type="file" id="file-input" accept="image/*" hidden>
+                    </div>
+                    
+                    <div class="camera-container" id="camera-container" style="display: none;">
+                        <video id="camera-feed" autoplay playsinline></video>
+                        <button class="btn-primary" id="btn-capture">Capture Photo</button>
+                        <button class="btn-clear" id="btn-close-camera">
+                            <span>×</span>
+                        </button>
+                        <canvas id="camera-canvas" hidden></canvas>
+                    </div>
+                    
+                    <div class="preview-container" id="preview-container">
+                        <img id="image-preview" src="" alt="Image Preview">
+                        <button class="btn-clear" id="btn-clear">
+                            <span>×</span>
+                        </button>
+                    </div>
+
+                    <div class="action-section">
+                        <button id="btn-predict" class="btn-primary" disabled>Analyze Image</button>
+                    </div>
+                </div>
+
+                <div class="result-section" id="result-section">
+                    <div class="prediction-header">
+                        <h2>Prediction Result</h2>
+                        <div class="top-prediction" id="top-prediction">
+                            <span class="label">Awaiting Image...</span>
+                        </div>
+                    </div>
+                    
+                    <div class="explanation-section" id="explanation-section" style="display: none;">
+                        <h3>🧠 Prediction Insights</h3>
+                        <ul id="explanation-list"></ul>
+                    </div>
+                    
+                    <div class="steps-section" id="steps-section" style="display: none;">
+                        <h3>♻️ What to Do Next?</h3>
+                        <ul id="steps-list"></ul>
+                    </div>
+
+                    <button id="btn-view-challenge" class="btn-primary" style="display: none; margin-top: 1.5rem; background: linear-gradient(to right, #60a5fa, #c084fc);">Next Level: View Challenge 🎯</button>
+                </div>
+            </div>
+            
+            <button id="btn-back-home" style="margin-top: 2rem; background: transparent; color: var(--text-muted); border: none; cursor: pointer; display: block; margin-left: auto; margin-right: auto;">&larr; Back to Home</button>
+        </div>
+
+        <!-- Screen 3: Challenge -->
+        <div id="screen-challenge" class="screen" style="display: none;">
+            <header>
+                <h1>Your Daily Challenge 🎯</h1>
+                <p>Level up your planet-saving skills!</p>
+            </header>
+            
+            <div class="challenge-content glass-panel" style="background: var(--glass-bg); padding: 3rem; border-radius: 20px; border: 1px solid var(--glass-border); text-align: center;">
+                <h2 id="challenge-class-title" style="color: var(--success); text-transform: capitalize; font-size: 3rem; margin-bottom: 2rem; font-weight: 600;">Class</h2>
+                
+                <div style="background: rgba(59, 130, 246, 0.1); padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem; border: 1px solid rgba(59, 130, 246, 0.3);">
+                    <h3 style="color: var(--primary-color); margin-bottom: 0.8rem; font-size: 1.2rem;">🏆 Today's Challenge</h3>
+                    <p id="challenge-text" style="color: white; font-size: 1.1rem; line-height: 1.5;"></p>
+                </div>
+                
+                <div style="background: rgba(139, 92, 246, 0.1); padding: 1.5rem; border-radius: 12px; margin-bottom: 2.5rem; border: 1px solid rgba(139, 92, 246, 0.3);">
+                    <h3 style="color: #c084fc; margin-bottom: 0.8rem; font-size: 1.2rem;">💡 Did You Know?</h3>
+                    <p id="fact-text" style="color: white; font-size: 1.1rem; line-height: 1.5;"></p>
+                </div>
+                
+                <button id="btn-restart" class="btn-primary" style="padding: 1rem 3rem;">Scan Another Item 🔄</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="spinner"></div>
+        <p>Analyzing with AI...</p>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
